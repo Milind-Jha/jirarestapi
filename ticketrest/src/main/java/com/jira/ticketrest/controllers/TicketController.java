@@ -48,27 +48,43 @@ public class TicketController {
 	}
 	
 	@PostMapping("users/createTicket/{userId}")
-	public Ticket createTicket(@PathVariable String userId,@RequestBody Ticket ticket) {
-		if(ticket.getCreator().getUserId().equals(userId))
-			return demoTicketDao.createTicket(userId, ticket);
-		return null;
+	public ResponseEntity<Ticket> createTicket(@PathVariable String userId,@RequestBody Ticket ticket) throws IllegalStateException{
+		if(demoUserDao.getUser(userId)!=null){
+				if(ticket.getCreator()!=null && ticket.getCreator().getUserId()!=null && demoUserDao.getUser(ticket.getCreator().getUserId())!=null){
+					if (ticket.getCreator().getUserId().equals(userId)){
+						if(ticket.getCreator().getPassword().equals(demoUserDao.getUser(userId).getPassword()) &&
+							ticket.getCreator().getName().equalsIgnoreCase(demoUserDao.getUser(userId).getName()) &&
+							ticket.getCreator().getEmail().equalsIgnoreCase(demoUserDao.getUser(userId).getEmail())){
+						return  ResponseEntity.status(HttpStatus.CREATED).body(demoTicketDao.createTicket(userId, ticket));
+					}
+					throw new IllegalStateException("Invalid Credentials");
+				}
+				throw new IllegalStateException("userId : "+ userId+ " does not match with userId given in Ticket :"+ticket.getCreator().getUserId());
+			}
+			if(ticket==null || ticket.getCreator()==null)
+				throw new IllegalStateException("Invalid Credentials");
+			throw new IllegalStateException("user with userId : "+ ticket.getCreator().getUserId()+ " does not exist");
+		}
+		throw new IllegalStateException("User with user id: "+userId+" not found");
 	}
 	
 	@PatchMapping("/users/updatestatus/{userId}/{ticketId}")
-	public ResponseEntity<Ticket> updateStatus(@PathVariable String userId,@PathVariable String ticketId,@RequestBody String finalStatus) throws Exception {
-		if(demoUserDao.getUser(userId)== null) {
-			System.err.println("User not found");
-			return null;
+	public ResponseEntity<Ticket> updateStatus(@PathVariable String userId,@PathVariable String ticketId,@RequestBody String finalStatus)
+			throws UnauthorisedStatusChangeException,IllegalStateException,TicketNotFoundException {
+		if(demoUserDao.getUser(userId)!= null) {
+//			System.err.println("User not found");
+//			return null;
+			if(demoTicketDao.getTicket(ticketId)==null)
+				throw new TicketNotFoundException("Ticket with "+ ticketId+" has not been found");
+			if(demoTicketDao.getAllAssignedTickets(userId).contains(demoTicketDao.getTicket(ticketId))) {
+				TicketStatus ticketStatus = demoTicketDao.getTicket(ticketId).getTicketStatus();
+				demoTicketDao.getTicket(ticketId).setTicketStatus(ticketStatus.getNextStatus(finalStatus.substring(1,finalStatus.length()-1)));
+				return ResponseEntity.status(HttpStatus.OK).body( demoTicketDao.getTicket(ticketId));
+
+			}
+			throw new UnauthorisedStatusChangeException("You do not have permission to change the status of ticket with ID : "+ticketId);
 		}
-		if(demoTicketDao.getTicket(ticketId)==null)
-			throw new TicketNotFoundException("Ticket with "+ ticketId+" has not been found");
-		if(demoTicketDao.getAllAssignedTickets(userId).contains(demoTicketDao.getTicket(ticketId))) {
-			TicketStatus ticketStatus = demoTicketDao.getTicket(ticketId).getTicketStatus();
-			demoTicketDao.getTicket(ticketId).setTicketStatus(ticketStatus.getNextStatus(finalStatus.substring(1,finalStatus.length()-1)));
-			return ResponseEntity.status(HttpStatus.OK).body( demoTicketDao.getTicket(ticketId));
-			
-		}
-		throw new UnauthorisedStatusChangeException("You do not have permission to change the status of ticket with ID : "+ticketId);
+		throw new IllegalStateException("User with user id: "+userId+" not found");
 	}
 	
 	@PatchMapping("/users/cancelticket/{userId}/{ticketId}")

@@ -38,5 +38,18 @@ public class CustomExceptionHandler {
 		ApiResponse apiResponse = ApiResponse.builder().message(exception.getMessage()).success(false).status(HttpStatus.NOT_FOUND).build();
 		return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
 	}
+
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseEntity<ApiResponse> handleIllegalStateException(IllegalStateException exception){
+		ApiResponse apiResponse;
+		if(exception.getMessage().equalsIgnoreCase("Invalid Credentials")){
+			apiResponse= ApiResponse.builder().message(exception.getMessage()).success(false).status(HttpStatus.UNAUTHORIZED).build();
+			return new ResponseEntity<>(apiResponse,HttpStatus.UNAUTHORIZED);
+		}
+		else {
+			apiResponse = ApiResponse.builder().message(exception.getMessage()).success(false).status(HttpStatus.NOT_FOUND).build();
+			return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+		}
+	}
 	
 }
