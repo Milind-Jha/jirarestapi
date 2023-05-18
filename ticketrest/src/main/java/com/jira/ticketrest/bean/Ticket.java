@@ -2,12 +2,24 @@ package com.jira.ticketrest.bean;
 
 import java.util.UUID;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+
 public class Ticket {
 	
+	
 	private String ticketId;
+
 	private TicketStatus ticketStatus;
+	
+	@NotNull(message = "creator cannot be null")
 	private final User creator;
+	
 	private User assignedTo;
+	@NotEmpty(message = "content cannot be blank")
+	@Size(min = 3,max = 20,message = "content has to be between 3 to 20 characters")
 	private String content;
 	
 	public Ticket(User creator,String content) {

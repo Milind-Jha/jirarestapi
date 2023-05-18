@@ -23,9 +23,9 @@ public class DemoUserDao {
 			userIds.add(UUID.randomUUID().toString());
 		}
 		
-		users.add(new User(userIds.get(0),"Milind","milind.jha@devkraft.in","abcd"));
-		users.add(new User(userIds.get(1),"Abhishek","abhishek@devkraft.in","dlwv"));
-		users.add(new User(userIds.get(2),"Sachin","sachin@devkraft.in","efgh"));
+		users.add(new User(userIds.get(0),"Milind","milind.jha@devkraft.in","abcdvevv"));
+		users.add(new User(userIds.get(1),"Abhishek","abhishek@devkraft.in","dldsvvwv"));
+		users.add(new User(userIds.get(2),"Sachin","sachin@devkraft.in","efgdvvveh"));
 	}
 	
 	public List<String> getUserIds(){
