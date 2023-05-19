@@ -1,6 +1,7 @@
 package com.jira.ticketrest.dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,10 +35,10 @@ public class DemoTicketDao {
 	}
 	
 	
-	public List<Ticket> getAllCreatedTickets(String userIds){
+	public List<Ticket> getAllCreatedTickets(String userId){
 		List<Ticket> ans = new LinkedList();
 		for(Ticket ticket: tickets) {
-			if(ticket.getCreator().equals(demoUserDao.getUser(userIds)))
+			if(ticket.getCreator().equals(demoUserDao.getUser(userId)))
 				ans.add(ticket);
 		}
 		return ans;
@@ -61,9 +62,14 @@ public class DemoTicketDao {
 	}
 	
 	public Set<Ticket> getAllCreatedAndAssignedTickets(String userIds){
-		Set<Ticket> ans = new HashSet();
-		ans = getAllCreatedTickets(userIds).stream().collect(Collectors.toSet());
-		ans = getAllAssignedTickets(userIds).stream().collect(Collectors.toSet());
+		Set<Ticket> collect1 = getAllCreatedTickets(userIds).stream().collect(Collectors.toSet());
+		Set<Ticket> collect2 = getAllAssignedTickets(userIds).stream().collect(Collectors.toSet());
+		Set<Ticket> ans = new HashSet<Ticket>() {
+			{
+				addAll(collect1);
+				addAll(collect2);
+			}
+		};
 		return ans;
 	}
 	

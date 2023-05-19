@@ -42,7 +42,12 @@ public class CustomExceptionHandler {
 	
 	@ExceptionHandler(InvalidUserException.class)
 	public ResponseEntity<ApiResponse> handleInvalidUserException(InvalidUserException exception){
-		ApiResponse apiResponse = ApiResponse.builder().message(exception.getMessage()).success(false).status(HttpStatus.NOT_FOUND).build();
+		ApiResponse apiResponse;
+		if(exception.getMessage().startsWith("wrong password for userId")) {
+			apiResponse = ApiResponse.builder().message(exception.getMessage()).success(false).status(HttpStatus.FORBIDDEN).build();
+			return new ResponseEntity<>(apiResponse,HttpStatus.FORBIDDEN);
+		}
+		apiResponse = ApiResponse.builder().message(exception.getMessage()).success(false).status(HttpStatus.NOT_FOUND).build();
 		return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
 	}
 	

@@ -19,10 +19,11 @@ public class User {
 	
 	
 	private String userId;
-	@NotEmpty(message = "name cannot be null")
+	@NotEmpty(message = "name cannot be empty")
 	@Size(min = 3,max = 20,message = "name has to be between 3 to 20 characters")
 	private String name;
-	@Size(min = 8,max = 20,message = "name has to be between 8 to 20 characters")
+	@NotEmpty(message = "email cannot be empty")
+	@Size(min = 8,max = 30,message = "email has to be between 8 to 30 characters")
 	@Email(message = "Enter valid mail")
 	private String email;
 	@NotEmpty(message = "password cannot be null")
