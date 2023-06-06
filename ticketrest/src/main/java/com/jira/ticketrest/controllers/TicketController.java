@@ -27,7 +27,7 @@ import com.jira.ticketrest.exception.TicketNotFoundException;
 import com.jira.ticketrest.exception.UnauthorisedStatusChangeException;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/ticket")
 public class TicketController {
 
 	private DemoTicketDao demoTicketDao;
