@@ -6,6 +6,7 @@ Endpoints -
 Get Mapping-
 
 http://localhost:8080/jira/users/                         [get all users]
+
 http://localhost:8080/jira/users/{userId}                 [getUser]
 http://localhost:8080/jira/ticket/assignedticket/{userId} [get all assigned ticket for user with user id]
 http://localhost:8080/jira/ticket/createdticket/{userId}  [get all created ticket for user with user id]
