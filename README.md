@@ -22,7 +22,9 @@ http://localhost:8080/jira/users/updateuser/{userId}      [update user with user
 
 Patch Mapping-
 http://localhost:8080/jira/ticket/updatestatus/{userId}/{ticketId} [update status for ticket with ticket id by user id] {@RequestBody String finalStatus}
+
 http://localhost:8080/jira/ticket/cancelticket/{userId}/{ticketId} [cancel ticket for ticket id and cancelled by user with user id]
+
 http://localhost:8080/jira/ticket//updateassigned/{userId}/{newUserId}/{ticketId} [update ticket assigned to from user id to new user id]
 
 Delete Mapping - 
