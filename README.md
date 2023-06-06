@@ -14,6 +14,7 @@ http://localhost:8080/jira/ticket/allticket/{userId}      [get all created and a
 Post Mapping-
 
 http://localhost:8080/jira/users/                         [create user] {@RequestBody User user}
+
 http://localhost:8080/jira/ticket/createTicket/{userId}   [create ticket by user of user id] { @RequestBody Ticket ticket}
 
 Put Mapping-
